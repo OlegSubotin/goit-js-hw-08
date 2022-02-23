@@ -4,7 +4,7 @@ const STORAGE_KEY = "feedback-form-state";
 
 let formData = {};
 
-const formEl = document.querySelector('.feedback-form');
+let formEl = document.querySelector('.feedback-form');
 const emailEl = document.querySelector(".feedback-form input");
 const textareaEl = document.querySelector('.feedback-form textarea');
 
@@ -15,6 +15,10 @@ populateTextarea()
 
 function onFormSubmit(evt) {
     evt.preventDefault();
+    const { elements: { email, message } } = evt.target;
+    if (email.value === '' || message.value === '') { 
+    return
+    }
     console.log(JSON.parse(localStorage.getItem(STORAGE_KEY)));
     console.log('Форму отправил');
     evt.target.reset();
@@ -30,19 +34,15 @@ function onTextareaInput(evt) {
 function populateTextarea() {
     const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
-    if (savedData) {
-        formData = savedData;
+    if (!savedData) {
+    return
     }
-
-    if (emailEl.value = savedData.email) {
-        emailEl.value = savedData.email;
-    } else {
-        emailEl.value = emailEl.value;
+    
+    if (savedData.email) {
+    formEl.email.value = savedData.email;
     }
-
-    if (textareaEl.value = savedData.message) {
-        textareaEl.value = savedData.message;
-    } else {
-        textareaEl.value = textareaEl.value;
+    
+    if (savedData.message) {
+    formEl.message.value = savedData.message;
     }
 }
